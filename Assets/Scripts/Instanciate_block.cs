@@ -13,30 +13,43 @@ public class Instanciate_block : MonoBehaviour
     public LayerMask mask;
 
     public GameObject Cube;
+    public GameObject Transparent_Cube;
+    GameObject clone = null;
     // Start is called before the first frame update
     void Update()
     {
-        
-    if (Input.GetButtonDown(fireButton))
+    
+
+
+
+    float distance;
+    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition + new Vector3(0, 50, 0));
+    RaycastHit hitInfo;
+    if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, mask))
     {
-
-        float distance;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, mask))
-        {
-            worldPosition = hitInfo.point;
-            Debug.Log(worldPosition);
-            GameObject Clone = Instantiate(Cube, worldPosition, Quaternion.identity);
-
-            Physics.IgnoreCollision(Cube.GetComponent<Collider>(), GetComponent<Collider>());
+        worldPosition = hitInfo.point;
+        Debug.Log(worldPosition);
+        Vector3 NewWorldPosition = new Vector3(Mathf.Round(worldPosition.x), 1 , Mathf.Round(worldPosition.z));
+        if(!clone) {
+            clone = Instantiate(Transparent_Cube, NewWorldPosition, Quaternion.identity);
         }
-        Debug.DrawRay(ray.origin, ray.direction * 10, Color.blue);
-  
+        clone.transform.position = NewWorldPosition;
+
+        Physics.IgnoreCollision(clone.GetComponent<Collider>(), GetComponent<Collider>());
+    }
+    Debug.DrawRay(ray.origin, ray.direction * 10, Color.blue);
+    if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, mask))
+    {
+        worldPosition = hitInfo.point;
+        Debug.Log(worldPosition);
+        Vector3 NewWorldPosition = new Vector3(Mathf.Round(worldPosition.x), 1 , Mathf.Round(worldPosition.z));
+        if (Input.GetButtonDown(fireButton))
+        {
+            Instantiate(Cube, NewWorldPosition, Quaternion.identity);  
+        }
+        
     }
 
 
     }
-
-
 }
