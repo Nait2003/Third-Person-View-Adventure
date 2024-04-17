@@ -10,8 +10,9 @@ public class Instanciate_block : MonoBehaviour
     public Vector3 worldPosition;
     Plane plane = new Plane(Vector3.up, 0);
 
+    public LayerMask Interactable_item;
     public LayerMask mask;
-
+    public Interactable focus;
     public GameObject Cube;
     public GameObject Transparent_Cube;
     GameObject clone = null;
@@ -24,14 +25,46 @@ public class Instanciate_block : MonoBehaviour
     Vector3 NewWorldPosition;
     void Update()
     {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition + new Vector3(0, 50, 0));
+        Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log(Input.GetMouseButtonDown(0));
+            RaycastHit hit;
+
+            if (!Physics.Raycast(ray, out hit, 100, Interactable_item))
+            {
+                RemoveFocus();
+            }
+
+        }
+        //Input.GetMouseButtonDown(0))
+        RaycastHit scan;
+        if (Physics.Raycast(ray, out scan, 100, Interactable_item))
+        {
+            
+            Debug.Log(Input.GetMouseButtonDown(0));
+           
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Interactable interactable = scan.collider.GetComponent<Interactable>();
+                if (interactable != null)
+                {
+                    SetFocus(interactable);
+                }
+            
+            }
+        }
         if (Input.GetButtonDown("Build_Button"))
         {
+            Debug.Log(buildMode);
             buildMode = !buildMode;
             if (buildMode == false)
             {
-            Destroy (clone);
-            clone = null;
+                Destroy(clone);
+                clone = null;
             }
 
         }
@@ -44,7 +77,7 @@ public class Instanciate_block : MonoBehaviour
         if (buildMode)
         {
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition + new Vector3(0, 50, 0));
+            
             RaycastHit hitInfo;
 
 
@@ -57,7 +90,7 @@ public class Instanciate_block : MonoBehaviour
                     NewWorldPosition = new Vector3(
                         Mathf.Round(worldPosition.x),
                         Mathf.Round(worldPosition.y),
-                        Mathf.Round(worldPosition.z));    
+                        Mathf.Round(worldPosition.z));
                 }
                 else
                 {
@@ -82,4 +115,16 @@ public class Instanciate_block : MonoBehaviour
 
         }
     }
+
+    void SetFocus(Interactable NewFocus)
+    {
+        focus = NewFocus;
+    }
+
+    void RemoveFocus()
+    {
+        focus = null;
+    }
+
 }
+

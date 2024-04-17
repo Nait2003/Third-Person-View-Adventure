@@ -6,7 +6,6 @@ public class Character_Movement : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed;
-
     public float groundDrag;
 
     public float jumpForce;
@@ -34,6 +33,7 @@ public class Character_Movement : MonoBehaviour
 
     private void Start()
     {
+
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         jumpReady = true;

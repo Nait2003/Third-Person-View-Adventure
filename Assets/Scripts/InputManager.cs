@@ -22,10 +22,13 @@ public class InputManager : MonoBehaviour
     public float camHorizontalInput;
     #endregion
 
+
     private void Awake()
     {
         animatorManager = GetComponent<AnimatorManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void OnEnable()
