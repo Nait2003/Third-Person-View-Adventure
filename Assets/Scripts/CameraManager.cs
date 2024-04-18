@@ -26,12 +26,11 @@ public class CameraManager : MonoBehaviour
 
     public float lookAngle; // cam up/down
     public float pivotAngle; // cam left/right
-    public float minimumPivotAngle = -35;
-    public float maximumPivotAngle = 35;
+    public float minimumPivotAngle = -45;
+    public float maximumPivotAngle = 45;
 
     private void Awake()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
         inputManager = FindObjectOfType<InputManager>();
         targetTransform = FindObjectOfType<PlayerManager>().transform;
         cameraTransform = Camera.main.transform;

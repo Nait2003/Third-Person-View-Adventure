@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     Animator animator;
+    AnimatorManager animatorManager;
     InputManager inputManager;
     PlayerLocomotion playerLocomotion;
     CameraManager cameraManager;
@@ -15,6 +16,7 @@ public class PlayerManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         animator = GetComponent<Animator>();
+        animatorManager = GetComponent<AnimatorManager>();
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
         cameraManager = FindObjectOfType<CameraManager>();
@@ -23,8 +25,9 @@ public class PlayerManager : MonoBehaviour
 
     private void Update()
     {
+        //inputManager.GroundCheck();
+        //animatorManager.UpdateAnimatorValues();
         inputManager.HandleAllInputs();
-
     }
 
     private void FixedUpdate()
@@ -35,6 +38,7 @@ public class PlayerManager : MonoBehaviour
     private void LateUpdate()
     {
         cameraManager.HandleAllCameraMovement();
+
         //isInteracting = animator.GetBool("isInteracting");
         //playerLocomotion.isJumping = animator.GetBool("isJumping");
         animator.SetBool("isGrounded", playerLocomotion.isGrounded);

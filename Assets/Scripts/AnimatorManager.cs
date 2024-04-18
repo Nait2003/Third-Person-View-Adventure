@@ -6,19 +6,19 @@ public class AnimatorManager : MonoBehaviour
 {
     public Animator animator;
     PlayerLocomotion playerLocomotion;
-    int horizontal;
-    int vertical;
+    int animHorizontal;
+    int animVertical;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
-        horizontal = Animator.StringToHash("Horizontal");
-        vertical = Animator.StringToHash("Vertical");
+        animHorizontal = Animator.StringToHash("Horizontal");
+        animVertical = Animator.StringToHash("Vertical");
 
     }
 
-    public void PlayTargetAnimation(string targetAnimation, bool isInteracting)
+    public void PlayTargetAnimation(string targetAnimation)
     {
         //animator.SetBool("isInteracting", isInteracting);
         animator.CrossFade(targetAnimation, 0.2f);
@@ -75,7 +75,7 @@ public class AnimatorManager : MonoBehaviour
         }
         #endregion
 
-        animator.SetFloat(horizontal, snappedHorizontal, 0.1f, Time.deltaTime);
-        animator.SetFloat(vertical, snappedVertical, 0.1f, Time.deltaTime);
+        animator.SetFloat(animHorizontal, snappedHorizontal, 0.1f, Time.deltaTime);
+        animator.SetFloat(animVertical, snappedVertical, 0.1f, Time.deltaTime);
     }
 }
