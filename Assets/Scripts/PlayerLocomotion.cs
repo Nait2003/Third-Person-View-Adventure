@@ -114,38 +114,35 @@ public class PlayerLocomotion : MonoBehaviour
         else
         {
             isGrounded = false;
+            inAirTimer = inAirTimer + Time.deltaTime;
         }
-        Debug.DrawRay(dir, hit.point, Color.yellow);
-
         if (!isGrounded)
         {
-            animatorManager.PlayTargetAnimation("Falling");
-
-            inAirTimer = inAirTimer + Time.deltaTime;
-            //playerRb.AddForce(transform.forward * leapingVelocity);
-            playerRb.AddForce(Vector3.down * fallingVelocity * inAirTimer);
+            animatorManager.PlayAnimation("Fall", 0);
         }
-        if (isGrounded)
+        else if (isGrounded && inAirTimer > 0)
         {
-            animatorManager.PlayTargetAnimation("Land");
+            animatorManager.PlayAnimation("Land", 0);
+            inAirTimer = 0;
         }
-        inAirTimer = 0;
-        //playerManager.isInteracting = false;
+
+        //playerRb.AddForce(Vector3.down * fallingVelocity * inAirTimer);
         //wantsJump = false; // Reset wantsJump when landing
     }
 
 
     //public void HandleJump()
     //{
-        //if (isGrounded && wantsJump)
-        //{
-            //animatorManager.animator.SetBool("wantsJump", true);
-            //animatorManager.PlayTargetAnimation("Jump", false);
+    //if (isGrounded && wantsJump)
+    //{
+    //animatorManager.animator.SetBool("wantsJump", true);
+    //animatorManager.PlayTargetAnimation("Jump", false);
 
-            //float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
+    //float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
 
-            //moveDirection.y = jumpingVelocity;
-            //playerRb.velocity = moveDirection;
-        //}
-        
-    }
+    //moveDirection.y = jumpingVelocity;
+    //playerRb.velocity = moveDirection;
+    //}
+
+}
+

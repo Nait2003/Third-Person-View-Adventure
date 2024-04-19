@@ -8,6 +8,7 @@ public class AnimatorManager : MonoBehaviour
     PlayerLocomotion playerLocomotion;
     int animHorizontal;
     int animVertical;
+    private string currentAnimation = "";
 
     private void Awake()
     {
@@ -18,10 +19,29 @@ public class AnimatorManager : MonoBehaviour
 
     }
 
-    public void PlayTargetAnimation(string targetAnimation)
+    //public void CheckAnimation()
+
+
+    public void PlayAnimation(string targetAnimation, float duration = 0)
     {
-        //animator.SetBool("isInteracting", isInteracting);
-        animator.CrossFade(targetAnimation, 0.2f);
+        if (duration > 0) StartCoroutine(Wait());
+        else CheckAnimation();
+
+        IEnumerator Wait()
+        {
+            yield return new WaitForSeconds(duration);
+            CheckAnimation();
+        }
+
+        void CheckAnimation()
+        {
+
+            if (currentAnimation != targetAnimation)
+            {
+                currentAnimation = targetAnimation;
+                animator.CrossFade(targetAnimation, 0.2f);
+            }
+        }
     }
 
     public void UpdateAnimatorValues(float horizontalMovement, float verticalMovement)
