@@ -13,12 +13,18 @@ public class Instanciate_block : MonoBehaviour
     public LayerMask Interactable_item;
     public LayerMask mask;
     public Interactable focus;
+    public GameObject Cube2;
     public GameObject Cube;
     public GameObject Transparent_Cube;
+    public GameObject Transparent_Cube2;
     GameObject clone = null;
+    GameObject clone2 = null;
 
     private bool buildMode = false;
     private bool GridToggle = true;
+    private bool buildMode2 = false;
+
+    
 
     // Start is called before the first frame update
 
@@ -66,6 +72,11 @@ public class Instanciate_block : MonoBehaviour
                 Destroy(clone);
                 clone = null;
             }
+            if (buildMode2 == false)
+            {
+                Destroy(clone2);
+                clone2 = null;
+            }
 
         }
 
@@ -74,11 +85,33 @@ public class Instanciate_block : MonoBehaviour
             GridToggle = !GridToggle;
         }
 
+        
+
+
         if (buildMode)
         {
+            buildMode2 = false;
+            if (buildMode == true)
+            {
+                Destroy(clone2);
+                clone2 = null;
+            }
+            if (Input.GetButtonDown("Build_Button2"))
+            {
+                buildMode2 = !buildMode2;
+                if (buildMode == false)
+                {
+                    Destroy(clone);
+                    clone = null;
+                }
+                if (buildMode2 == false)
+                {
+                    Destroy(clone2);
+                    clone2 = null;
+                }
+            }
 
-            
-            RaycastHit hitInfo;
+        RaycastHit hitInfo;
 
 
             if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, mask))
@@ -108,6 +141,52 @@ public class Instanciate_block : MonoBehaviour
                 if (Input.GetButtonDown(fireButton))
                 {
                     Instantiate(Cube, NewWorldPosition, Quaternion.identity);
+                }
+
+            }
+            Debug.DrawRay(ray.origin, ray.direction * 10, Color.blue);
+
+        }
+
+        if (buildMode2)
+        {
+
+            buildMode = false;
+            if (buildMode2 == true)
+            {
+                Destroy(clone);
+                clone = null;
+            }
+            RaycastHit hitInfo;
+
+
+            if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, mask))
+            {
+                worldPosition = hitInfo.point;
+
+                if (GridToggle)
+                {
+                    NewWorldPosition = new Vector3(
+                        Mathf.Round(worldPosition.x),
+                        Mathf.Round(worldPosition.y),
+                        Mathf.Round(worldPosition.z));
+                }
+                else
+                {
+                    NewWorldPosition = worldPosition;
+                }
+                Debug.Log(hitInfo.collider.gameObject);
+
+                if (!clone2)
+                {
+                    clone2 = Instantiate(Transparent_Cube2, NewWorldPosition, Quaternion.identity);
+                }
+                clone2.transform.position = NewWorldPosition;
+
+                Physics.IgnoreCollision(clone.GetComponent<Collider>(), GetComponent<Collider>());
+                if (Input.GetButtonDown(fireButton))
+                {
+                    Instantiate(Cube2, NewWorldPosition, Quaternion.identity);
                 }
 
             }
