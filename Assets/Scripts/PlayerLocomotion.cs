@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class PlayerLocomotion : MonoBehaviour
 {
@@ -20,8 +21,10 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("Falling")]
     public float inAirTimer;
     //public float leapingVelocity;
+    public float baseGravity = -9.81f;
+    public float gravityMultiplier = 2f;
     public float fallingVelocity;
-    public float rayCastHeightOffSet = 0.5f;
+    public float rayCastHeightOffSet = 0.1f;
     public LayerMask whatIsGround;
 
     [Header("Movement Flags")]
@@ -56,6 +59,7 @@ public class PlayerLocomotion : MonoBehaviour
         HandleMovement();
         HandleRotation();
         //HandleJump();
+
     }
 
     private void HandleMovement()
@@ -77,8 +81,10 @@ public class PlayerLocomotion : MonoBehaviour
             }
         }
 
-        //moveDirection = moveDirection * walkingSpeed;
-        //Vector3 movementVelocity = moveDirection;
+        ApplyGravity();
+        Debug.Log(moveDirection.y);
+        Debug.Log(playerRb.velocity.y);
+
         playerRb.velocity = moveDirection;
     }
 
@@ -101,20 +107,39 @@ public class PlayerLocomotion : MonoBehaviour
         transform.rotation = playerRotation;
     }
 
+    private void ApplyGravity()
+    {
+        if (!isGrounded)
+        {
+            fallingVelocity += baseGravity * gravityMultiplier * Time.deltaTime;
+            moveDirection.y = fallingVelocity;
+        }
+        else 
+        {
+
+            fallingVelocity = -3f;
+        }
+
+        //playerRb.velocity.y = moveDirection.y;
+    }
+
     private void HandleFallingAndLanding()
     {
         RaycastHit hit;
-        float distance = 1f;
+        float distance = 0.5f;
         Vector3 dir = new Vector3(0, -1);
+        Debug.DrawRay(transform.position, dir, Color.yellow);
 
         if (Physics.Raycast(transform.position, dir, out hit, distance))
         {
+            fallingVelocity = 0f;
             isGrounded = true;
         }
         else
         {
             isGrounded = false;
             inAirTimer = inAirTimer + Time.deltaTime;
+
         }
         if (!isGrounded)
         {
