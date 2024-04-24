@@ -10,6 +10,8 @@ public class PlayerManager : MonoBehaviour
     PlayerLocomotion playerLocomotion;
     CameraManager cameraManager;
 
+    public bool isInteracting = false;
+
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -18,10 +20,13 @@ public class PlayerManager : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
         cameraManager = FindObjectOfType<CameraManager>();
+
     }
 
     private void Update()
     {
+        //inputManager.GroundCheck();
+        //animatorManager.UpdateAnimatorValues();
         inputManager.HandleAllInputs();
     }
 
@@ -33,13 +38,8 @@ public class PlayerManager : MonoBehaviour
     private void LateUpdate()
     {
         cameraManager.HandleAllCameraMovement();
+        //isInteracting = animator.GetBool("isInteracting");
+        //playerLocomotion.isJumping = animator.GetBool("isJumping");
+        //animator.SetBool("isGrounded", playerLocomotion.isGrounded);
     }
 }
-
-
-//isInteracting = animator.GetBool("isInteracting");
-//playerLocomotion.isJumping = animator.GetBool("isJumping");
-//animator.SetBool("isGrounded", playerLocomotion.isGrounded);
-//inputManager.GroundCheck();
-//animatorManager.UpdateAnimatorValues();
-//public bool isInteracting = false;
